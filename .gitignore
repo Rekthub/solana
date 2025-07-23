@@ -1,0 +1,18 @@
+.anchor
+.DS_Store
+target
+**/*.rs.bk
+node_modules
+test-ledger
+.yarn
+
+# local env files
+.env*.local
+.env/
+.env
+.env.local
+.env.production
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
