@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import * as anchor from '@coral-xyz/anchor';
 import { Program } from '@coral-xyz/anchor';
-import { PumpfunClone } from '../target/types/pumpfun_clone';
+import { Dumpfun } from '../target/types/dumpfun';
 import { BN } from 'bn.js';
 import { Keypair, PublicKey, SystemProgram } from '@solana/web3.js';
 import {
@@ -10,13 +10,13 @@ import {
 	MINT_SIZE,
 	TOKEN_PROGRAM_ID,
 } from '@solana/spl-token';
-import { bs58 } from 'bs58';
+import { bs58 } from '@coral-xyz/anchor/dist/cjs/utils/bytes';
 
-describe('pumpfun-clone', () => {
+describe('dumpfun', () => {
 	// Configure the client to use the local cluster.
 	anchor.setProvider(anchor.AnchorProvider.env());
 
-	const program = anchor.workspace.pumpfunClone as Program<PumpfunClone>;
+	const program = anchor.workspace.dumpfun as Program<Dumpfun>;
 
 	it('should initialize a mint, bonding curve, and mint a billion tokens to the token_vault!', async () => {
 		const mint = Keypair.generate();

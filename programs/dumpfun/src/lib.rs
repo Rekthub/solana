@@ -15,10 +15,10 @@ use contexts::*;
 use errors::*;
 use instructions::*;
 
-declare_id!("94Eu8hV6tL7qe4FktVEtQqzDNuHyCBCv29KM7GE8qYK9");
+declare_id!("GSPbBwn6YurtVniiFiUnYMdPEhxMczEDCUdsaCodg3v3");
 
 #[program]
-pub mod pumpfun_clone {
+pub mod dumpfun {
     use super::*;
 
     pub fn initialize_token(

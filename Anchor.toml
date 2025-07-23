@@ -6,7 +6,7 @@ resolution = true
 skip-lint = false
 
 [programs.devnet]
-pumpfun_clone = "94Eu8hV6tL7qe4FktVEtQqzDNuHyCBCv29KM7GE8qYK9"
+dumpfun = "GSPbBwn6YurtVniiFiUnYMdPEhxMczEDCUdsaCodg3v3"
 
 [registry]
 url = "https://api.apr.dev"
