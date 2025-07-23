@@ -15,7 +15,7 @@ use contexts::*;
 use errors::*;
 use instructions::*;
 
-declare_id!("GSPbBwn6YurtVniiFiUnYMdPEhxMczEDCUdsaCodg3v3");
+declare_id!("dumpz8FfmeKTUHg3WiZYTxwsFQAQSrCqpD4y474XBdR");
 
 #[program]
 pub mod dumpfun {
