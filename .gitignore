@@ -6,6 +6,8 @@ node_modules
 test-ledger
 .yarn
 
+yarn.lock
+
 # local env files
 .env*.local
 .env/
