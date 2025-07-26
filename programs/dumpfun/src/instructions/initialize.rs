@@ -62,7 +62,7 @@ pub fn initialize_ix(
         signer_seeds,
     );
 
-    mint_to(mint_token_cpi_ctx, INITIAL_SUPPLY)?;
+    mint_to(mint_token_cpi_ctx, TOTAL_TOKEN_SUPPLY)?;
 
     // Deduct contract fee
     let deduct_contract_fee_ix = transfer(
@@ -84,13 +84,13 @@ pub fn initialize_ix(
     bonding_curve.mint = mint.key();
     bonding_curve.authority = mint_authority.key();
 
-    bonding_curve.real_sol_reserves = 0;
-    bonding_curve.real_token_reserves = INITIAL_SUPPLY;
+    bonding_curve.real_sol_reserves = REAL_SOL_RESERVES;
+    bonding_curve.real_token_reserves = REAL_TOKEN_RESERVES;
 
     bonding_curve.virtual_sol_reserves = VIRTUAL_SOL_RESERVES;
     bonding_curve.virtual_token_reserves = VIRTUAL_TOKEN_RESERVES;
 
-    bonding_curve.total_token_supply = INITIAL_SUPPLY;
+    bonding_curve.total_token_supply = TOTAL_TOKEN_SUPPLY;
     bonding_curve.is_bonding_curve_complete = false;
 
     let event = OnInitializeEvent {
@@ -103,8 +103,8 @@ pub fn initialize_ix(
         uri,
         virtual_sol_reserves: VIRTUAL_SOL_RESERVES,
         virtual_token_reserves: VIRTUAL_TOKEN_RESERVES,
-        real_sol_reserves: 0,
-        real_token_reserves: INITIAL_SUPPLY,
+        real_sol_reserves: REAL_SOL_RESERVES,
+        real_token_reserves: TOTAL_TOKEN_SUPPLY,
         timestamp,
     };
 
