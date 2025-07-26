@@ -3,7 +3,12 @@ import * as anchor from '@coral-xyz/anchor';
 import { Program } from '@coral-xyz/anchor';
 import { Dumpfun } from '../target/types/dumpfun';
 import { BN } from 'bn.js';
-import { Keypair, PublicKey, SystemProgram } from '@solana/web3.js';
+import {
+	Keypair,
+	LAMPORTS_PER_SOL,
+	PublicKey,
+	SystemProgram,
+} from '@solana/web3.js';
 import {
 	createInitializeMintInstruction,
 	getMinimumBalanceForRentExemptMint,
@@ -18,16 +23,13 @@ describe('dumpfun', () => {
 
 	const program = anchor.workspace.dumpfun as Program<Dumpfun>;
 
-	it('should initialize a mint, bonding curve, and mint a billion tokens to the token_vault!', async () => {
-		const mint = Keypair.generate();
+	const mint = Keypair.generate();
 
+	it('should initialize a mint, bonding curve, and mint a billion tokens to the token_vault!', async () => {
 		const [mintAuthorityPDA] = PublicKey.findProgramAddressSync(
-			[Buffer.from('mint_authority'), mint.publicKey.toBuffer()],
+			[Buffer.from('mint_authority')],
 			program.programId
 		);
-
-		const basePrice = new BN(1_000);
-		const initSupply = new BN(1_000_000_000).mul(new BN(10).pow(new BN(9)));
 
 		const creator = Keypair.fromSecretKey(
 			bs58.decode(process.env.WALLET_PRIVATE_KEY)
@@ -45,24 +47,69 @@ describe('dumpfun', () => {
 
 		const initializeMintInstruction = createInitializeMintInstruction(
 			mint.publicKey,
-			9,
+			6,
 			mintAuthorityPDA,
 			null,
 			TOKEN_PROGRAM_ID
 		);
 
 		const tx = await program.methods
-			.initializeToken(basePrice, 300, initSupply)
+			.initialize(
+				'Solana Gold',
+				'GOLDSOL',
+				'https://53cso10vyy.ufs.sh/f/0zLYHmgdOsEGYF3WHmI7jv08b2BZmzpuEFaAiQNHXKsgrPTD'
+			)
 			.accounts({
 				creator: creator.publicKey,
 				mint: mint.publicKey,
+				tokenMetadataProgram: new PublicKey(
+					'metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s'
+				),
 			})
 			.preInstructions([
 				createAccountInstruction,
 				initializeMintInstruction,
 			])
 			.signers([creator, mint])
-			.rpc();
+			.rpc({ skipPreflight: true });
+
+		console.log('Your transaction signature', tx);
+	});
+
+	it('should buy 1 sol worth of tokens from the bonding curve', async () => {
+		const buyer = Keypair.fromSecretKey(
+			bs58.decode(process.env.WALLET_PRIVATE_KEY)
+		);
+
+		const tx = await program.methods
+			.buy(new BN(1 * LAMPORTS_PER_SOL), new BN(500))
+			.accounts({
+				mint: mint.publicKey,
+				buyer: buyer.publicKey,
+			})
+			.signers([buyer])
+			.rpc({ skipPreflight: true });
+
+		console.log('Your transaction signature', tx);
+	});
+
+	it('should sell 100% worth of tokens to the bonding curve', async () => {
+		const seller = Keypair.fromSecretKey(
+			bs58.decode(process.env.WALLET_PRIVATE_KEY)
+		);
+
+		const tx = await program.methods
+			.sell(
+				new anchor.BN(10000), // 5000 basis points = 50%
+				true,
+				new anchor.BN(300) // 3% slippage
+			)
+			.accounts({
+				mint: mint.publicKey,
+				seller: seller.publicKey,
+			})
+			.signers([seller])
+			.rpc({ skipPreflight: true });
 
 		console.log('Your transaction signature', tx);
 	});
