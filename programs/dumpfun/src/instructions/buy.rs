@@ -73,6 +73,9 @@ pub fn buy_ix(
     bonding_curve.real_sol_reserves += net_amount;
     bonding_curve.is_bonding_curve_complete = bonding_curve.is_ready_for_graduation()?;
 
+    let clock = Clock::get()?;
+    let timestamp = clock.unix_timestamp;
+
     let event = OnBuyEvent {
         buyer: buyer.key(),
         mint: *mint,
@@ -84,6 +87,7 @@ pub fn buy_ix(
         real_sol_reserves: bonding_curve.real_sol_reserves,
         real_token_reserves: bonding_curve.real_token_reserves,
         is_bonding_curve_complete: bonding_curve.is_bonding_curve_complete,
+        timestamp,
     };
 
     emit_cpi!(event);

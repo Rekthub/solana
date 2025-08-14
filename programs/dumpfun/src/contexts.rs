@@ -139,6 +139,7 @@ pub struct OnBuyEvent {
     pub real_sol_reserves: u64,
     pub real_token_reserves: u64,
     pub is_bonding_curve_complete: bool,
+    pub timestamp: i64,
 }
 
 #[event_cpi]
@@ -193,4 +194,5 @@ pub struct OnSellEvent {
     pub virtual_token_reserves: u64,
     pub real_sol_reserves: u64,
     pub real_token_reserves: u64,
+    pub timestamp: i64,
 }

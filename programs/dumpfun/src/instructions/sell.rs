@@ -59,17 +59,17 @@ pub fn sell_ix(
 
     // 7. Transfer tokens from user to bonding curve
     let cpi_accounts = Transfer {
-      from: associated_user.to_account_info(),
-      to: associated_bonding_curve.to_account_info(),
-      authority: seller.to_account_info(),
+        from: associated_user.to_account_info(),
+        to: associated_bonding_curve.to_account_info(),
+        authority: seller.to_account_info(),
     };
     let cpi_ctx = CpiContext::new(token_program.to_account_info(), cpi_accounts);
     token::transfer(cpi_ctx, tokens_to_sell)?;
-    
+
     // 8. Transfer sol from bonding curve to user
     **bonding_curve.to_account_info().try_borrow_mut_lamports()? -= sol_to_receive;
     **seller.try_borrow_mut_lamports()? += sol_to_receive;
-    
+
     // 9. Transfer fees from bonding curve to fee vault
     **bonding_curve.to_account_info().try_borrow_mut_lamports()? -= fee;
     **global_fee_vault.try_borrow_mut_lamports()? += fee;
@@ -81,6 +81,9 @@ pub fn sell_ix(
     bonding_curve.virtual_sol_reserves -= gross_sol;
     bonding_curve.real_sol_reserves -= gross_sol;
 
+    let clock = Clock::get()?;
+    let timestamp = clock.unix_timestamp;
+
     let event = OnSellEvent {
         seller: seller.key(),
         mint: mint.key(),
@@ -91,6 +94,7 @@ pub fn sell_ix(
         virtual_token_reserves: bonding_curve.virtual_token_reserves,
         real_sol_reserves: bonding_curve.real_sol_reserves,
         real_token_reserves: bonding_curve.real_token_reserves,
+        timestamp,
     };
 
     emit_cpi!(event);
