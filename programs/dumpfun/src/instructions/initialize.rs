@@ -104,7 +104,7 @@ pub fn initialize_ix(
         virtual_sol_reserves: VIRTUAL_SOL_RESERVES,
         virtual_token_reserves: VIRTUAL_TOKEN_RESERVES,
         real_sol_reserves: REAL_SOL_RESERVES,
-        real_token_reserves: TOTAL_TOKEN_SUPPLY,
+        real_token_reserves: REAL_TOKEN_RESERVES,
         timestamp,
     };
 
