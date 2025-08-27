@@ -1,7 +1,8 @@
 {
   "license": "ISC",
   "scripts": {
-    "start": "yarn run ts-mocha -p ./tsconfig.json -t 100000000 app/index.ts",
+    "start": "ts-node app/index.ts",
+    "start:pro": "ts-node app/advanced-trading-algo.ts",
     "lint:fix": "prettier */*.js \"*/**/*{.js,.ts}\" -w",
     "lint": "prettier */*.js \"*/**/*{.js,.ts}\" --check"
   },
