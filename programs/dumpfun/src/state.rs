@@ -55,61 +55,12 @@ impl BondingCurve {
         Ok((n - fee) as u64)
     }
 
-    /// Calculate current market price per token in lamports
-    /// Returns the price of 1 token in SOL lamports
-    pub fn get_market_price(&self) -> Result<u64> {
-        if self.is_bonding_curve_complete {
-            return err!(Errors::BondingCurveComplete);
-        }
-
-        if self.virtual_token_reserves == 0 {
-            return Ok(0);
-        }
-
-        // Price per token = virtual_sol_reserves / virtual_token_reserves
-        // Both reserves are already in their base units (lamports and tokens)
-        // So we can calculate directly
-        let price_lamports = (self.virtual_sol_reserves as u128) * 1_000_000_000
-            / (self.virtual_token_reserves as u128);
-
-        Ok(price_lamports as u64)
-    }
-
-    /// Calculate market cap in SOL lamports
-    /// Returns total market cap based on current price and total supply
-    pub fn get_market_cap(&self) -> Result<u64> {
-        if self.is_bonding_curve_complete {
-            return err!(Errors::BondingCurveComplete);
-        }
-
-        // Simple calculation: market_cap = virtual_sol_reserves * total_supply / virtual_token_reserves
-        // This avoids the intermediate price calculation and potential precision loss
-        let market_cap_lamports = ((self.virtual_sol_reserves as u128)
-            * (self.total_token_supply as u128))
-            / (self.virtual_token_reserves as u128);
-
-        Ok(market_cap_lamports as u64)
-    }
-
-    /// Get the current price for buying exactly 1 token (for comparison)
-    pub fn get_single_token_buy_price(&self) -> Result<u64> {
-        self.get_buy_price(1_000_000_000) // 1 token with 9 decimals
-    }
-
-    /// Check if bonding curve has reached graduation market cap threshold
-    /// Returns true when market cap reaches the graduation threshold in SOL
-    pub fn is_market_cap_complete(&self, graduation_threshold_sol: u64) -> Result<bool> {
+    /// Check if entire virtual token reserves has been sold out
+    pub fn is_ready_for_graduation(&self) -> Result<bool> {
         if self.is_bonding_curve_complete {
             return Ok(true);
         }
 
-        let current_market_cap_lamports = self.get_market_cap()?;
-        let threshold_lamports = graduation_threshold_sol * 1_000_000_000;
-        Ok(current_market_cap_lamports >= threshold_lamports)
-    }
-
-    /// Convenience function to check graduation at 400 SOL market cap
-    pub fn is_ready_for_graduation(&self) -> Result<bool> {
-        self.is_market_cap_complete(400)
+        Ok(self.real_token_reserves <= 0)
     }
 }
