@@ -16,6 +16,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - TBD - Bug fixes
 
+## [1.1.0] - 2025-08-31
+
+### Improved
+- 🏗️ **Code Architecture**: Migrated from raw `invoke()` calls to Anchor's CPI pattern for enhanced type safety and cleaner code
+- 🔒 **Token Security**: Updated all token transfers to use `TransferChecked` instead of `Transfer` for decimal and mint validation
+- 📐 **Space Management**: Replaced manual account space calculations with `INIT_SPACE` constants for better maintainability
+- 🧹 **Code Quality**: Reduced boilerplate code and improved readability across all instruction handlers
+
+### Technical Enhancements
+- System program transfers now use `system_program::transfer()` with `CpiContext` for better type safety
+- Token operations validate decimals and mint addresses through `TransferChecked` CPI calls
+- Streamlined signer seed handling in all PDA-based operations
+- Enhanced compile-time validation for account types and program interactions
+
+### Security
+- **Enhanced Protection**: `TransferChecked` prevents decimal mismatch attacks and ensures mint validation
+- **Type Safety**: CPI pattern provides compile-time guarantees for cross-program invocations
+- **Reduced Attack Surface**: Eliminated manual instruction building in favor of Anchor's validated patterns
+
+### Developer Experience
+- Cleaner, more maintainable codebase following Anchor best practices
+- Better error handling and debugging capabilities
+- Improved code documentation and inline comments
+
 ## [1.0.0] - 2025-08-31
 
 ### Added
