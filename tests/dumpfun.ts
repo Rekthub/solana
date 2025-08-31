@@ -65,10 +65,11 @@ describe('dumpfun', () => {
 				tokenMetadataProgram: new PublicKey(
 					'metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s'
 				),
+				tokenProgram: TOKEN_PROGRAM_ID,
 			})
 			.preInstructions([createAccountInstruction, initializeMintInstruction])
 			.signers([creator, mint])
-			.rpc({ skipPreflight: true });
+			.rpc({ skipPreflight: false });
 
 		console.log('token creation transaction signature', tx);
 	});
@@ -82,6 +83,7 @@ describe('dumpfun', () => {
 			.accounts({
 				mint: mint.publicKey,
 				buyer: creator.publicKey,
+				tokenProgram: TOKEN_PROGRAM_ID,
 			})
 			.signers([creator])
 			.rpc({ skipPreflight: true });
@@ -99,6 +101,7 @@ describe('dumpfun', () => {
 			.accounts({
 				mint: mint.publicKey,
 				seller: creator.publicKey,
+				tokenProgram: TOKEN_PROGRAM_ID,
 			})
 			.signers([creator])
 			.rpc({ skipPreflight: true });
