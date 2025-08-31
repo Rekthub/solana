@@ -65,19 +65,11 @@ pub fn initialize_ix(
     mint_to(mint_token_cpi_ctx, TOTAL_TOKEN_SUPPLY)?;
 
     // Deduct contract fee
-    let deduct_contract_fee_ix = transfer(
-        &creator.key(),
-        &global_fee_vault.key(),
+    transfer_sol(
+        &creator.to_account_info(),
+        &global_fee_vault.to_account_info(),
+        &system_program.to_account_info(),
         TOKEN_INITIALISATION_FEE,
-    );
-
-    invoke(
-        &deduct_contract_fee_ix,
-        &[
-            creator.to_account_info(),
-            global_fee_vault.to_account_info(),
-            system_program.to_account_info(),
-        ],
     )?;
 
     bonding_curve.creator = creator.key();

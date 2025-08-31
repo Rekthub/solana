@@ -1,8 +1,5 @@
 #![allow(deprecated)]
-use anchor_lang::{
-    prelude::*,
-    solana_program::{clock::Clock, program::invoke},
-};
+use anchor_lang::{prelude::*, solana_program::clock::Clock, system_program};
 use anchor_spl::{
     associated_token::AssociatedToken,
     token::{mint_to, Mint, MintTo, Token, TokenAccount},
@@ -11,7 +8,6 @@ use mpl_token_metadata::{
     instructions::CreateMetadataAccountV3CpiBuilder, types::Creator, types::DataV2,
     ID as MetadataProgram,
 };
-use solana_system_interface::instruction::transfer;
 
 pub mod constants;
 pub mod contexts;

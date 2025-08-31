@@ -47,23 +47,19 @@ pub fn buy_ix(
     token::transfer(cpi_ctx, tokens_to_receive)?;
 
     // 5. Transfer SOL to reserve (net amount)
-    invoke(
-        &transfer(&buyer.key(), &bonding_curve.key(), net_amount),
-        &[
-            buyer.to_account_info(),
-            bonding_curve.to_account_info(),
-            system_program.to_account_info(),
-        ],
+    transfer_sol(
+        &buyer.to_account_info(),
+        &bonding_curve.to_account_info(),
+        &system_program.to_account_info(),
+        net_amount,
     )?;
 
     // 6. Transfer fee to global fee vault
-    invoke(
-        &transfer(&buyer.key(), &global_fee_vault.key(), fee),
-        &[
-            buyer.to_account_info(),
-            global_fee_vault.to_account_info(),
-            system_program.to_account_info(),
-        ],
+    transfer_sol(
+        &buyer.to_account_info(),
+        &global_fee_vault.to_account_info(),
+        &system_program.to_account_info(),
+        fee,
     )?;
 
     // 7. Update bonding curve state
