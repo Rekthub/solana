@@ -1,7 +1,6 @@
 #![allow(deprecated)]
 use anchor_lang::{
     prelude::*,
-    Space,
     solana_program::{clock::Clock, program::invoke},
 };
 use anchor_spl::{
