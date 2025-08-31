@@ -1,6 +1,7 @@
 use super::*;
 
 #[account]
+#[derive(InitSpace)]
 pub struct BondingCurve {
     pub creator: Pubkey,
     pub mint: Pubkey,

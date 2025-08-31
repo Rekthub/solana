@@ -27,7 +27,7 @@ pub struct Initialize<'info> {
     #[account(
         init,
         payer = creator,
-        space = 256,
+        space = BondingCurve::INIT_SPACE + BondingCurve::DISCRIMINATOR.len(),
         seeds = [BONDING_CURVE.as_bytes(), mint.key().as_ref()],
         bump
     )]
