@@ -2,7 +2,7 @@
 use anchor_lang::{prelude::*, solana_program::clock::Clock, system_program};
 use anchor_spl::{
     associated_token::AssociatedToken,
-    token::{mint_to, Mint, MintTo, Token, TokenAccount},
+    token_interface::{self, mint_to, Mint, MintTo, TokenAccount, TokenInterface, TransferChecked},
 };
 use mpl_token_metadata::{
     instructions::CreateMetadataAccountV3CpiBuilder, types::Creator, types::DataV2,

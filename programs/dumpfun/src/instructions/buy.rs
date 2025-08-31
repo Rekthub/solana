@@ -1,5 +1,4 @@
 use super::*;
-use anchor_spl::token::{self, Transfer};
 
 pub fn buy_ix(
     ctx: Context<Buy>,
@@ -7,7 +6,9 @@ pub fn buy_ix(
     slippage_basis_points: Option<u64>,
 ) -> Result<()> {
     let buyer = &ctx.accounts.buyer;
-    let mint = &ctx.accounts.mint.key();
+    let mint = &ctx.accounts.mint;
+    let mint_key = mint.key();
+
     let bonding_curve = &mut ctx.accounts.bonding_curve;
     let associated_bonding_curve = &ctx.accounts.associated_bonding_curve;
     let associated_user = &ctx.accounts.associated_user;
@@ -17,7 +18,7 @@ pub fn buy_ix(
     let slippage_bps = slippage_basis_points.unwrap_or(DEF_SLIPPAGE_BPS);
     let signer_seeds: &[&[&[u8]]] = &[&[
         BONDING_CURVE.as_bytes(),
-        mint.as_ref(),
+        mint_key.as_ref(),
         &[ctx.bumps.bonding_curve],
     ]];
 
@@ -35,16 +36,15 @@ pub fn buy_ix(
     }
 
     // 4. Transfer tokens to buyer
-    let cpi_accounts = Transfer {
-        from: associated_bonding_curve.to_account_info(),
-        to: associated_user.to_account_info(),
-        authority: bonding_curve.to_account_info(),
-    };
-
-    let cpi_ctx =
-        CpiContext::new_with_signer(token_program.to_account_info(), cpi_accounts, signer_seeds);
-
-    token::transfer(cpi_ctx, tokens_to_receive)?;
+    transfer_tokens(
+        associated_bonding_curve,
+        associated_user,
+        &bonding_curve.to_account_info(),
+        &mint,
+        token_program,
+        tokens_to_receive,
+        Some(&signer_seeds),
+    )?;
 
     // 5. Transfer SOL to reserve (net amount)
     transfer_sol(
@@ -74,7 +74,7 @@ pub fn buy_ix(
 
     let event = OnBuyEvent {
         buyer: buyer.key(),
-        mint: *mint,
+        mint: mint.key(),
         sol_spent: amount_in_sol,
         tokens_received: tokens_to_receive,
         fee_paid: fee,

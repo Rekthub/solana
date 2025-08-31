@@ -23,3 +23,28 @@ pub fn transfer_sol<'info>(
     );
     system_program::transfer(cpi_context, amount)
 }
+
+pub fn transfer_tokens<'info>(
+    from: &InterfaceAccount<'info, TokenAccount>,
+    to: &InterfaceAccount<'info, TokenAccount>,
+    authority: &AccountInfo<'info>,
+    mint: &InterfaceAccount<'info, Mint>,
+    token_program: &Interface<'info, TokenInterface>,
+    amount: u64,
+    signer_seeds: Option<&[&[&[u8]]]>,
+) -> Result<()> {
+    let cpi_accounts = TransferChecked {
+        from: from.to_account_info(),
+        to: to.to_account_info(),
+        authority: authority.clone(),
+        mint: mint.to_account_info(),
+    };
+
+    let cpi_ctx = if let Some(seeds) = signer_seeds {
+        CpiContext::new_with_signer(token_program.to_account_info(), cpi_accounts, seeds)
+    } else {
+        CpiContext::new(token_program.to_account_info(), cpi_accounts)
+    };
+
+    token_interface::transfer_checked(cpi_ctx, amount, mint.decimals)
+}

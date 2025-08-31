@@ -1,5 +1,4 @@
 use super::*;
-use anchor_spl::token::{self, Transfer};
 
 pub fn sell_ix(
     ctx: Context<Sell>,
@@ -58,13 +57,15 @@ pub fn sell_ix(
     }
 
     // 7. Transfer tokens from user to bonding curve
-    let cpi_accounts = Transfer {
-        from: associated_user.to_account_info(),
-        to: associated_bonding_curve.to_account_info(),
-        authority: seller.to_account_info(),
-    };
-    let cpi_ctx = CpiContext::new(token_program.to_account_info(), cpi_accounts);
-    token::transfer(cpi_ctx, tokens_to_sell)?;
+    transfer_tokens(
+        associated_user,
+        associated_bonding_curve,
+        &seller.to_account_info(),
+        &mint,
+        token_program,
+        tokens_to_sell,
+        None,
+    )?;
 
     // 8. Transfer sol from bonding curve to user
     **bonding_curve.to_account_info().try_borrow_mut_lamports()? -= sol_to_receive;

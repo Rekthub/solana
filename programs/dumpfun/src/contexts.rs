@@ -6,7 +6,7 @@ pub struct Initialize<'info> {
     #[account(mut)]
     pub creator: Signer<'info>,
 
-    pub mint: Account<'info, Mint>,
+    pub mint: InterfaceAccount<'info, Mint>,
 
     /// CHECK: validated elsewhere in the program
     #[account(
@@ -22,7 +22,7 @@ pub struct Initialize<'info> {
         associated_token::mint = mint,
         associated_token::authority = bonding_curve
     )]
-    pub associated_bonding_curve: Account<'info, TokenAccount>,
+    pub associated_bonding_curve: InterfaceAccount<'info, TokenAccount>,
 
     #[account(
         init,
@@ -60,7 +60,7 @@ pub struct Initialize<'info> {
 
     pub system_program: Program<'info, System>,
 
-    pub token_program: Program<'info, Token>,
+    pub token_program: Interface<'info, TokenInterface>,
 
     pub associated_token_program: Program<'info, AssociatedToken>,
 
@@ -89,7 +89,7 @@ pub struct Buy<'info> {
     #[account(mut)]
     pub buyer: Signer<'info>,
 
-    pub mint: Account<'info, Mint>,
+    pub mint: InterfaceAccount<'info, Mint>,
 
     #[account(
         init_if_needed,
@@ -97,7 +97,7 @@ pub struct Buy<'info> {
         associated_token::mint = mint,
         associated_token::authority = buyer
     )]
-    pub associated_user: Account<'info, TokenAccount>,
+    pub associated_user: InterfaceAccount<'info, TokenAccount>,
 
     #[account(
         mut,
@@ -111,7 +111,7 @@ pub struct Buy<'info> {
         associated_token::mint = mint,
         associated_token::authority = bonding_curve
     )]
-    pub associated_bonding_curve: Account<'info, TokenAccount>,
+    pub associated_bonding_curve: InterfaceAccount<'info, TokenAccount>,
 
     /// CHECK: validated elsewhere in the program
     #[account(
@@ -121,7 +121,7 @@ pub struct Buy<'info> {
     )]
     pub global_fee_vault: UncheckedAccount<'info>,
 
-    pub token_program: Program<'info, Token>,
+    pub token_program: Interface<'info, TokenInterface>,
     pub associated_token_program: Program<'info, AssociatedToken>,
     pub system_program: Program<'info, System>,
     pub rent: Sysvar<'info, Rent>,
@@ -148,14 +148,14 @@ pub struct Sell<'info> {
     #[account(mut)]
     pub seller: Signer<'info>,
 
-    pub mint: Account<'info, Mint>,
+    pub mint: InterfaceAccount<'info, Mint>,
 
     #[account(
         mut,
         associated_token::mint = mint,
         associated_token::authority = seller
     )]
-    pub associated_user: Account<'info, TokenAccount>,
+    pub associated_user: InterfaceAccount<'info, TokenAccount>,
 
     #[account(
         mut,
@@ -169,7 +169,7 @@ pub struct Sell<'info> {
         associated_token::mint = mint,
         associated_token::authority = bonding_curve
     )]
-    pub associated_bonding_curve: Account<'info, TokenAccount>,
+    pub associated_bonding_curve: InterfaceAccount<'info, TokenAccount>,
 
     /// CHECK: validated elsewhere in the program
     #[account(
@@ -179,7 +179,7 @@ pub struct Sell<'info> {
     )]
     pub global_fee_vault: UncheckedAccount<'info>,
 
-    pub token_program: Program<'info, Token>,
+    pub token_program: Interface<'info, TokenInterface>,
     pub system_program: Program<'info, System>,
 }
 
