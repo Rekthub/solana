@@ -72,6 +72,7 @@ pub fn initialize_ix(
         TOKEN_INITIALISATION_FEE,
     )?;
 
+    // Set bonding curve state
     bonding_curve.creator = creator.key();
     bonding_curve.mint = mint.key();
     bonding_curve.authority = mint_authority.key();
