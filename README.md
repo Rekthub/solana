@@ -466,7 +466,7 @@ Once prerequisites are installed:
 
 1. **Clone and Setup**
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/AdedigbaOluwad1/dumpfun.git
 cd dumpfun
 ```
 
