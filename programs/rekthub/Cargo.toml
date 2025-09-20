@@ -1,19 +1,19 @@
 [package]
-name = "dumpfun"
+name = "rekthub"
 version = "1.1.0"
-description = "DumpFun - A Solana memecoin launchpad with bonding curve mechanics"
+description = "RektHub - A Solana token launchpad with bonding curve mechanics"
 edition = "2021"
 authors = ["AdedigbaOluwad1"]
 license = "MIT"
 repository = "https://github.com/AdedigbaOluwad1/dumpfun"
 homepage = "https://github.com/AdedigbaOluwad1/dumpfun"
 documentation = "https://github.com/AdedigbaOluwad1/dumpfun#readme"
-keywords = ["solana", "defi", "memecoin", "bonding-curve", "launchpad"]
+keywords = ["solana", "defi", "tokens", "bonding-curve", "launchpad"]
 categories = ["cryptography::cryptocurrencies"]
 
 [lib]
 crate-type = ["cdylib", "lib"]
-name = "dumpfun"
+name = "rekthub"
 
 [lints.rust]
 unexpected_cfgs = { level = "warn", check-cfg = [
@@ -36,4 +36,4 @@ anchor-lang = { version = "0.31.1", features = ["init-if-needed", "event-cpi"] }
 solana-system-interface = "1.0.0"
 anchor-spl = "0.31.1"
 mpl-token-metadata = "5.1.0"
-
+raydium-cp-swap = { git = "https://github.com/raydium-io/raydium-cp-swap", features = ["cpi", "devnet"] }

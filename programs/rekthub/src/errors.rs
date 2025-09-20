@@ -8,6 +8,12 @@ pub enum Errors {
     #[msg("Bonding curve complete.")]
     BondingCurveComplete,
 
+    #[msg("Bonding curve not complete.")]
+    BondingCurveNotComplete,
+
+    #[msg("Bonding urve has been migrated.")]
+    BondingCurveMigrated,
+
     #[msg("Slippage tolerance exceeded")]
     SlippageExceeded,
 

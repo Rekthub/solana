@@ -6,7 +6,13 @@ resolution = true
 skip-lint = false
 
 [programs.devnet]
-dumpfun = "dumpz8FfmeKTUHg3WiZYTxwsFQAQSrCqpD4y474XBdR"
+rekthub = "rekthkL8cwpDX7BpsNKyJp72Xi99CT6bbLzx5UGt745"
+
+[programs.localnet]
+rekthub = "rekthkL8cwpDX7BpsNKyJp72Xi99CT6bbLzx5UGt745"
+
+[programs.mainnet]
+rekthub = "rekthB7rsdX7nCT8aQi977noT72AtkqVDWt1Y9VmZFG"
 
 [registry]
 url = "https://api.apr.dev"

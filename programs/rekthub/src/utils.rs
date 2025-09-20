@@ -13,15 +13,20 @@ pub fn transfer_sol<'info>(
     to: &AccountInfo<'info>,
     system_program: &AccountInfo<'info>,
     amount: u64,
+    signer_seeds: Option<&[&[&[u8]]]>,
 ) -> Result<()> {
-    let cpi_context = CpiContext::new(
-        system_program.clone(),
-        system_program::Transfer {
-            from: from.clone(),
-            to: to.clone(),
-        },
-    );
-    system_program::transfer(cpi_context, amount)
+    let cpi_accounts = system_program::Transfer {
+        from: from.clone(),
+        to: to.clone(),
+    };
+
+    let cpi_ctx = if let Some(seeds) = signer_seeds {
+        CpiContext::new_with_signer(system_program.clone(), cpi_accounts, seeds)
+    } else {
+        CpiContext::new(system_program.clone(), cpi_accounts)
+    };
+
+    system_program::transfer(cpi_ctx, amount)
 }
 
 pub fn transfer_tokens<'info>(

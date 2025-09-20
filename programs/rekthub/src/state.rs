@@ -7,17 +7,15 @@ pub struct BondingCurve {
     pub mint: Pubkey,
     pub authority: Pubkey,
 
-    // Real reserves (on-chain tracking)
     pub real_sol_reserves: u64,
     pub real_token_reserves: u64,
 
-    // Virtual reserves (for pricing logic)
     pub virtual_sol_reserves: u64,
     pub virtual_token_reserves: u64,
 
-    // Bookkeeping
     pub total_token_supply: u64,
     pub is_bonding_curve_complete: bool,
+    pub has_curve_migrated: bool,
 }
 
 impl BondingCurve {
@@ -56,7 +54,6 @@ impl BondingCurve {
         Ok((n - fee) as u64)
     }
 
-    /// Check if entire virtual token reserves has been sold out
     pub fn is_ready_for_graduation(&self) -> Result<bool> {
         if self.is_bonding_curve_complete {
             return Ok(true);
